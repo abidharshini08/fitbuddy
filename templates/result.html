@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}
+FitBuddy | Your Plan
+{% endblock %}
+
+
+{% block content %}
+
+<section class="page">
+
+    <div class="result-head">
+
+        <div>
+
+            <p class="eyebrow">
+                YOUR FITBUDDY PLAN
+            </p>
+
+            <h1>
+                {{ user.name }}'s
+                7-day routine
+            </h1>
+
+            <p class="muted">
+
+                {{ user.goal|title }}
+                •
+                {{ user.intensity|title }}
+                intensity
+                •
+                {{ user.weight }} kg
+
+            </p>
+
+        </div>
+
+
+        <a
+            class="btn ghost"
+            href="/"
+        >
+            New Plan
+        </a>
+
+    </div>
+
+
+    {% if updated %}
+
+    <div class="success">
+
+        Plan updated using your feedback.
+
+    </div>
+
+    {% endif %}
+
+
+    <div class="plan-layout">
+
+
+        <section class="card plan-card">
+
+            <div class="section-title">
+
+                <h2>
+                    Workout Plan
+                </h2>
+
+                <span class="pill">
+
+                    {{
+                        "Updated"
+                        if updated
+                        else "Original"
+                    }}
+
+                </span>
+
+            </div>
+
+
+            <pre class="plan-json">{{ workout }}</pre>
+
+        </section>
+
+
+        <aside class="card tip-card">
+
+            <h2>
+                Nutrition & Recovery
+            </h2>
+
+            <pre class="tip-json">{{ tip }}</pre>
+
+        </aside>
+
+    </div>
+
+
+    <section class="card feedback-card">
+
+        <h2>
+            Refine Your Plan
+        </h2>
+
+        <p class="muted">
+
+            Try feedback such as:
+            "add more cardio",
+            "make Friday a rest day",
+            or "reduce leg volume".
+
+        </p>
+
+
+        <form
+            action="/submit-feedback"
+            method="post"
+        >
+
+            <input
+                type="hidden"
+                name="user_id"
+                value="{{ user.user_id }}"
+            >
+
+
+            <textarea
+                name="feedback"
+                rows="5"
+                maxlength="2000"
+                placeholder="Tell FitBuddy what you want changed..."
+                required
+            ></textarea>
+
+
+            <button
+                class="btn primary"
+                type="submit"
+            >
+                Update Plan with AI →
+            </button>
+
+        </form>
+
+    </section>
+
+</section>
+
+{% endblock %}

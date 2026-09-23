@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+
+{% block title %}
+FitBuddy | Admin
+{% endblock %}
+
+
+{% block content %}
+
+<section class="page">
+
+    <div class="result-head">
+
+        <div>
+
+            <p class="eyebrow">
+                ADMIN DASHBOARD
+            </p>
+
+            <h1>
+                Users & Plans
+            </h1>
+
+        </div>
+
+
+        <a
+            class="btn ghost"
+            href="/"
+        >
+            Back
+        </a>
+
+    </div>
+
+
+    {% if not records %}
+
+    <div class="card empty">
+
+        No users have generated a plan yet.
+
+    </div>
+
+    {% endif %}
+
+
+    {% for user, plans in records %}
+
+    <article class="card admin-card">
+
+        <div class="admin-head">
+
+            <div>
+
+                <h2>
+
+                    {{ user.name }}
+
+                    <span class="muted">
+                        ({{ user.user_id }})
+                    </span>
+
+                </h2>
+
+                <p class="muted">
+
+                    {{ user.age }} years
+                    •
+                    {{ user.weight }} kg
+                    •
+                    {{ user.goal|title }}
+                    •
+                    {{ user.intensity|title }}
+
+                </p>
+
+            </div>
+
+
+            <form
+                action="/delete-user"
+                method="post"
+            >
+
+                <input
+                    type="hidden"
+                    name="user_id"
+                    value="{{ user.user_id }}"
+                >
+
+                <input
+                    type="hidden"
+                    name="admin_key"
+                    value="{{ request.query_params.get('admin_key') }}"
+                >
+
+                <button
+                    class="btn danger"
+                    type="submit"
+                >
+                    Delete
+                </button>
+
+            </form>
+
+        </div>
+
+
+        {% for plan in plans %}
+
+        <details>
+
+            <summary>
+
+                Plan created
+                {{ plan.created_at.strftime('%Y-%m-%d %H:%M') }}
+
+            </summary>
+
+
+            <h3>
+                Original
+            </h3>
+
+            <pre class="plan-json">
+{{ plan.original_plan }}
+            </pre>
+
+
+            {% if plan.updated_plan %}
+
+            <h3>
+                Updated
+            </h3>
+
+            <pre class="plan-json">
+{{ plan.updated_plan }}
+            </pre>
+
+
+            <h3>
+                Feedback
+            </h3>
+
+            <p>
+                {{ plan.feedback }}
+            </p>
+
+            {% endif %}
+
+        </details>
+
+        {% endfor %}
+
+    </article>
+
+    {% endfor %}
+
+</section>
+
+{% endblock %}
